@@ -13,7 +13,7 @@ public class Search_Room extends JFrame {
     JTable table;
     Search_Room(){
         JPanel panel = new JPanel();
-        panel.setBounds(5, 5, 690, 490);
+        panel.setBounds(5, 5, 675, 452);
         panel.setBackground(new Color(90, 156, 163));
         panel.setLayout(null);
         add(panel);

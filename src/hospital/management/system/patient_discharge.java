@@ -10,7 +10,7 @@ import java.util.Date;
 public class patient_discharge extends JFrame {
     patient_discharge(){
         JPanel panel = new JPanel();
-        panel.setBounds(5,5,790,390);
+        panel.setBounds(5,5,775,352);
         panel.setBackground(new Color(90,156,163));
         panel.setLayout(null);
         add(panel);

@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 public class Department extends JFrame {
     Department(){
         JPanel panel = new JPanel();
-        panel.setBounds(5,5,690,490);
+        panel.setBounds(5,5,675,450);
         panel.setLayout(null);
         panel.setBackground(new Color(90,156,163));
         add(panel);

@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 public class Patient_information extends JFrame {
     Patient_information(){
         JPanel panel = new JPanel();
-        panel.setBounds(5,5,890,590);
+        panel.setBounds(5,5,875,553);
         panel.setBackground(new Color(90,156,163));
         panel.setLayout(null);
         add(panel);
@@ -19,7 +19,8 @@ public class Patient_information extends JFrame {
         JTable table = new JTable();
         table.setBounds(10,40,900,450);
         table.setBackground(new Color(90,156,163));
-        table.setFont(new Font("Tahoma",Font.BOLD,14));
+        table.setFont(new Font("Tahoma",Font.BOLD,11));
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         panel.add(table);
 
         try{
@@ -27,6 +28,16 @@ public class Patient_information extends JFrame {
             String q = "select * from patient_information";
             ResultSet resultSet = c.statement.executeQuery(q);
             table.setModel(DbUtils.resultSetToTableModel(resultSet));
+            javax.swing.table.TableColumnModel columnModel = table.getColumnModel();
+            columnModel.getColumn(6).setPreferredWidth(150);
+            columnModel.getColumn(0).setPreferredWidth(80); // ID
+            columnModel.getColumn(1).setPreferredWidth(100); // Phone
+            columnModel.getColumn(2).setPreferredWidth(100); // Name
+            columnModel.getColumn(3).setPreferredWidth(80); // Gender
+            columnModel.getColumn(4).setPreferredWidth(120); // Disease
+            columnModel.getColumn(5).setPreferredWidth(60); // Room
+            // Cột 6 là Time (150)
+            columnModel.getColumn(7).setPreferredWidth(80);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -57,7 +68,7 @@ public class Patient_information extends JFrame {
         panel.add(label5);
 
         JLabel label6 = new JLabel("Room");
-        label6.setBounds(600,11,100,14);
+        label6.setBounds(585,11,100,14);
         label6.setFont(new Font("Tahoma",Font.BOLD,14));
         panel.add(label6);
 
@@ -66,8 +77,9 @@ public class Patient_information extends JFrame {
         label7.setFont(new Font("Tahoma",Font.BOLD,14));
         panel.add(label7);
 
+
         JLabel label8 = new JLabel("Deposit");
-        label8.setBounds(800,11,100,14);
+        label8.setBounds(820,11,100,14);
         label8.setFont(new Font("Tahoma",Font.BOLD,14));
         panel.add(label8);
 
@@ -82,6 +94,8 @@ public class Patient_information extends JFrame {
                 setVisible(false);
             }
         });
+
+
 
 
 

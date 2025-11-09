@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 public class Employee_information extends JFrame {
     Employee_information(){
         JPanel panel = new JPanel();
-        panel.setBounds(5,5,990,590);
+        panel.setBounds(5,5,975,550);
         panel.setBackground(new Color(109,164,170));
         panel.setLayout(null);
         add(panel);

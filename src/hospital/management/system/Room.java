@@ -33,7 +33,7 @@ public class Room extends JFrame {
 
       try{
          connect c = new connect();
-         String q ="select * from Room";
+         String q ="select * from room";
           ResultSet resultSet = c.statement.executeQuery(q);
           table.setModel(DbUtils.resultSetToTableModel(resultSet));
 
@@ -42,7 +42,7 @@ public class Room extends JFrame {
       }
 
       JLabel label1 = new JLabel("Vacant Room");
-      label1.setBounds(12,15,80,15);
+      label1.setBounds(12,15,100,15);
       label1.setFont(new Font("Tahoma",Font.BOLD,14));
       panel.add(label1);
 

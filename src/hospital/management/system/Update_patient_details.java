@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 public class Update_patient_details extends JFrame {
     Update_patient_details(){
         JPanel panel = new JPanel();
-        panel.setBounds(5,5,940,490);
+        panel.setBounds(5,5,925,450);
         panel.setBackground(new Color(90,156,163));
         panel.setLayout(null);
         add(panel);

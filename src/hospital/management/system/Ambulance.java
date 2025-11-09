@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 public class Ambulance extends JFrame {
     Ambulance(){
         JPanel panel = new JPanel();
-        panel.setBounds(5,5,890,590);
+        panel.setBounds(5,5,875,550);
         panel.setBackground(new Color(90,156,163));
         panel.setLayout(null);
         add(panel);

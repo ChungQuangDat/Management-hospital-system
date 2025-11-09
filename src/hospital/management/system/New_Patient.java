@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class New_Patient extends JFrame implements ActionListener {
@@ -136,10 +137,15 @@ public class New_Patient extends JFrame implements ActionListener {
         labelDate.setForeground(Color.white);
         panel.add(labelDate);
 
-        Date date1 = new Date();
 
-        date = new JLabel("" + date1);
-        date.setBounds(271, 316, 300, 14);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        Date date1 = new Date();
+        String formattedDate = sdf.format(date1); // Định dạng lại Date thành chuỗi
+
+        date = new JLabel(formattedDate); // Dùng chuỗi đã định dạng
+        date.setBounds(271, 316, 300, 15);
         date.setForeground(Color.white);
         date.setFont(new Font("Tahoma", Font.BOLD, 14));
         panel.add(date);
