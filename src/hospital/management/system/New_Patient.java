@@ -9,216 +9,210 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class New_Patient extends JFrame implements ActionListener {
-    JComboBox comboBox;
+    JComboBox<String> comboBox;
     JTextField textFieldNumber, textName, textFieldDisease, textFieldDeposite;
     JRadioButton r1, r2;
     Choice c1;
-    JLabel date;
+    JLabel dateLabel;
     JButton b1, b2;
 
-    New_Patient() {
-        JPanel panel = new JPanel();
-        panel.setBounds(5, 5, 840, 510);
-        panel.setBackground(new Color(90, 156, 163));
-        panel.setLayout(null);
-        add(panel);
+    public New_Patient() {
+        setTitle("New Patient Form");
+        setSize(900, 600);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout());
 
-        ImageIcon imageIcon = new ImageIcon(ClassLoader.getSystemResource("icon/patient.png"));
-        Image image = imageIcon.getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT);
-        ImageIcon imageIcon1 = new ImageIcon(image);
-        JLabel label = new JLabel(imageIcon1);
-        label.setBounds(550, 150, 200, 200);
-        panel.add(label);
 
-        JLabel labelName = new JLabel("New Patient Form");
-        labelName.setBounds(118, 11, 260, 53);
-        labelName.setFont(new Font("Tahoma", Font.BOLD, 20));
-        panel.add(labelName);
+        JPanel header = new JPanel();
+        header.setBackground(new Color(90, 156, 163));
+        JLabel title = new JLabel("New Patient Form");
+        title.setFont(new Font("Tahoma", Font.BOLD, 24));
+        title.setForeground(Color.WHITE);
+        header.add(title);
+        add(header, BorderLayout.NORTH);
 
-        JLabel labelID = new JLabel("ID:");
-        labelID.setBounds(35, 76, 200, 14);
-        labelID.setFont(new Font("Tahoma", Font.BOLD, 14));
-        labelID.setForeground(Color.white);
-        panel.add(labelID);
+
+        JPanel formPanel = new JPanel();
+        formPanel.setBackground(new Color(230, 240, 245));
+        formPanel.setLayout(null);
 
 
 
-        comboBox = new JComboBox(new String[]{"Citizen ID", "Passport", "Driving license"});
-        comboBox.setBounds(271, 73, 150, 20);
+        JLabel idlable = new JLabel("ID:");
+        idlable.setBounds(50,30,180,25);
+        idlable.setForeground(new Color(50,50,50));
+        idlable.setFont(new Font("Tahoma",Font.BOLD,14));
+        formPanel.add(idlable);
+
+        comboBox = new JComboBox<>(new String[]{"Citizen ID", "Passport", "Driving license"});
+        comboBox.setBounds(250, 30, 200, 25);
         comboBox.setBackground(new Color(3, 45, 48));
-        comboBox.setForeground(Color.white);
+        comboBox.setForeground(Color.WHITE);
         comboBox.setFont(new Font("Tahoma", Font.BOLD, 14));
-        panel.add(comboBox);
-
+        formPanel.add(comboBox);
 
         JLabel labelNumber = new JLabel("Phone:");
-        labelNumber.setBounds(35, 111, 200, 14);
+        labelNumber.setBounds(50, 70, 180, 25);
         labelNumber.setFont(new Font("Tahoma", Font.BOLD, 14));
-        labelNumber.setForeground(Color.white);
-        panel.add(labelNumber);
+        labelNumber.setForeground(new Color(50, 50, 50));
+        formPanel.add(labelNumber);
 
         textFieldNumber = new JTextField();
-        textFieldNumber.setBounds(271, 111, 150, 20);
-        panel.add(textFieldNumber);
+        textFieldNumber.setBounds(250, 70, 200, 25);
+        formPanel.add(textFieldNumber);
 
-
-        JLabel labelName1 = new JLabel("Full name:");
-        labelName1.setBounds(35, 151, 200, 14);
-        labelName1.setFont(new Font("Tahoma", Font.BOLD, 14));
-        labelName1.setForeground(Color.white);
-        panel.add(labelName1);
+        JLabel labelName = new JLabel("Full Name:");
+        labelName.setBounds(50, 110, 180, 25);
+        labelName.setFont(new Font("Tahoma", Font.BOLD, 14));
+        labelName.setForeground(new Color(50, 50, 50));
+        formPanel.add(labelName);
 
         textName = new JTextField();
-        textName.setBounds(271, 151, 150, 20);
-        panel.add(textName);
+        textName.setBounds(250, 110, 200, 25);
+        formPanel.add(textName);
 
         JLabel labelGender = new JLabel("Gender:");
-        labelGender.setBounds(35, 191, 200, 14);
+        labelGender.setBounds(50, 150, 180, 25);
         labelGender.setFont(new Font("Tahoma", Font.BOLD, 14));
-        labelGender.setForeground(Color.white);
-        panel.add(labelGender);
-
+        labelGender.setForeground(new Color(50, 50, 50));
+        formPanel.add(labelGender);
 
         r1 = new JRadioButton("Male");
-        r1.setFont(new Font("Tahoma", Font.BOLD, 14));
-        r1.setForeground(Color.white);
-        r1.setBackground(new Color(109, 164, 170));
-        r1.setBounds(271, 191, 80, 15);
-        panel.add(r1);
+        r1.setBounds(250, 150, 80, 25);
+        r1.setBackground(new Color(230, 240, 245));
+        r1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        formPanel.add(r1);
 
         r2 = new JRadioButton("Female");
-        r2.setFont(new Font("Tahoma", Font.BOLD, 14));
-        r2.setForeground(Color.white);
-        r2.setBackground(new Color(109, 164, 170));
-        r2.setBounds(350, 191, 80, 15);
-        panel.add(r2);
+        r2.setBounds(340, 150, 100, 25);
+        r2.setBackground(new Color(230, 240, 245));
+        r2.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        formPanel.add(r2);
 
         ButtonGroup bg = new ButtonGroup();
         bg.add(r1);
         bg.add(r2);
 
         JLabel labelDisease = new JLabel("Disease:");
-        labelDisease.setBounds(35, 231, 200, 14);
+        labelDisease.setBounds(50, 190, 180, 25);
         labelDisease.setFont(new Font("Tahoma", Font.BOLD, 14));
-        labelDisease.setForeground(Color.white);
-        panel.add(labelDisease);
+        labelDisease.setForeground(new Color(50, 50, 50));
+        formPanel.add(labelDisease);
 
         textFieldDisease = new JTextField();
-        textFieldDisease.setBounds(271, 231, 150, 20);
-        panel.add(textFieldDisease);
+        textFieldDisease.setBounds(250, 190, 200, 25);
+        formPanel.add(textFieldDisease);
 
         JLabel labelRoom = new JLabel("Room:");
-        labelRoom.setBounds(35, 274, 200, 14);
+        labelRoom.setBounds(50, 230, 180, 25);
         labelRoom.setFont(new Font("Tahoma", Font.BOLD, 14));
-        labelRoom.setForeground(Color.white);
-        panel.add(labelRoom);
+        labelRoom.setForeground(new Color(50, 50, 50));
+        formPanel.add(labelRoom);
 
         c1 = new Choice();
         try {
             connect c = new connect();
-            ResultSet resultSet = c.statement.executeQuery("select * from Room");
-            while (resultSet.next()) {
-                c1.add(resultSet.getString("vacant_room"));
+            ResultSet rs = c.statement.executeQuery("select * from Room");
+            while (rs.next()) {
+                c1.add(rs.getString("vacant_room"));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        c1.setBounds(271, 274, 150, 20);
-        c1.setFont(new Font("Tahoma", Font.BOLD, 14));
-        c1.setForeground(Color.WHITE);
-        c1.setBackground(new Color(3, 45, 48));
-        panel.add(c1);
-
+        c1.setBounds(250, 230, 200, 25);
+        formPanel.add(c1);
 
         JLabel labelDate = new JLabel("Time:");
-        labelDate.setBounds(35, 316, 200, 14);
+        labelDate.setBounds(50, 270, 180, 25);
         labelDate.setFont(new Font("Tahoma", Font.BOLD, 14));
-        labelDate.setForeground(Color.white);
-        panel.add(labelDate);
-
-
+        labelDate.setForeground(new Color(50, 50, 50));
+        formPanel.add(labelDate);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date now = new Date();
+        dateLabel = new JLabel(sdf.format(now));
+        dateLabel.setBounds(250, 270, 250, 25);
+        dateLabel.setForeground(new Color(50, 50, 50));
+        dateLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        formPanel.add(dateLabel);
 
-        Date date1 = new Date();
-        String formattedDate = sdf.format(date1); // Định dạng lại Date thành chuỗi
-
-        date = new JLabel(formattedDate); // Dùng chuỗi đã định dạng
-        date.setBounds(271, 316, 300, 15);
-        date.setForeground(Color.white);
-        date.setFont(new Font("Tahoma", Font.BOLD, 14));
-        panel.add(date);
-
-
-        JLabel labelDeposite = new JLabel("Deposit:");
-        labelDeposite.setBounds(35, 359, 200, 14);
-        labelDeposite.setFont(new Font("Tahoma", Font.BOLD, 14));
-        labelDeposite.setForeground(Color.white);
-        panel.add(labelDeposite);
+        JLabel labelDeposit = new JLabel("Deposit:");
+        labelDeposit.setBounds(50, 310, 180, 25);
+        labelDeposit.setFont(new Font("Tahoma", Font.BOLD, 14));
+        labelDeposit.setForeground(new Color(50, 50, 50));
+        formPanel.add(labelDeposit);
 
         textFieldDeposite = new JTextField();
-        textFieldDeposite.setBounds(271, 359, 150, 20);
-        panel.add(textFieldDeposite);
+        textFieldDeposite.setBounds(250, 310, 200, 25);
+        formPanel.add(textFieldDeposite);
+
 
         b1 = new JButton("ADD");
-        b1.setBounds(100, 430, 120, 30);
-        b1.setForeground(Color.white);
-        b1.setBackground(Color.BLACK);
+        b1.setBounds(180, 370, 120, 35);
+        b1.setBackground(new Color(90, 156, 163));
+        b1.setForeground(Color.WHITE);
+        b1.setFont(new Font("Tahoma", Font.BOLD, 16));
+        b1.setFocusPainted(false);
+        b1.setBorder(BorderFactory.createLineBorder(new Color(70, 130, 140), 2));
         b1.addActionListener(this);
-        panel.add(b1);
+        formPanel.add(b1);
 
         b2 = new JButton("BACK");
-        b2.setBounds(260, 430, 120, 30);
-        b2.setForeground(Color.white);
-        b2.setBackground(Color.BLACK);
+        b2.setBounds(320, 370, 120, 35);
+        b2.setBackground(new Color(90, 156, 163));
+        b2.setForeground(Color.WHITE);
+        b2.setFont(new Font("Tahoma", Font.BOLD, 16));
+        b2.setFocusPainted(false);
+        b2.setBorder(BorderFactory.createLineBorder(new Color(70, 130, 140), 2));
         b2.addActionListener(this);
-        panel.add(b2);
+        formPanel.add(b2);
 
 
-        setUndecorated(true);
-        setSize(850, 550);
-        setLayout(null);
-        setLocation(300, 200);
+        JScrollPane scrollPane = new JScrollPane(formPanel);
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(12, Integer.MAX_VALUE));
+        scrollPane.getVerticalScrollBar().setBackground(new Color(230, 240, 245));
+        scrollPane.getVerticalScrollBar().setForeground(new Color(90, 156, 163));
+        scrollPane.getHorizontalScrollBar().setPreferredSize(new Dimension(Integer.MAX_VALUE, 12));
+        scrollPane.getHorizontalScrollBar().setBackground(new Color(230, 240, 245));
+        scrollPane.getHorizontalScrollBar().setForeground(new Color(90, 156, 163));
+
+        add(scrollPane, BorderLayout.CENTER);
+
         setVisible(true);
-    }
-
-    static void main(String[] args) {
-        new New_Patient();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == b1) {
             connect c = new connect();
-            String radioBTN = null;
-            if (r1.isSelected()) {
-                radioBTN = "Male";
-            } else if (r2.isSelected()) {
-                radioBTN = "Female";
-            }
+            String gender = r1.isSelected() ? "Male" : r2.isSelected() ? "Female" : null;
             String s1 = (String) comboBox.getSelectedItem();
             String s2 = textFieldNumber.getText();
             String s3 = textName.getText();
-            String s4 = radioBTN;
+            String s4 = gender;
             String s5 = textFieldDisease.getText();
             String s6 = c1.getSelectedItem();
-            String s7 = date.getText();
+            String s7 = dateLabel.getText();
             String s8 = textFieldDeposite.getText();
 
             try {
                 String q = "insert into patient_information values('" + s1 + "','" + s2 + "','" + s3 + "','" + s4 + "','" + s5 + "','" + s6 + "','" + s7 + "','" + s8 + "')";
-                String q1 = "Update Room set Availability = 'Occupied' where vacant_room = " + s6;
+                String q1 = "Update Room set Availability = 'Occupied' where vacant_room = '" + s6 + "'";
                 c.statement.executeUpdate(q);
                 c.statement.executeUpdate(q1);
                 JOptionPane.showMessageDialog(null, "Added Successfully");
                 setVisible(false);
-            } catch (Exception E) {
-                E.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-
-        } else {
-             setVisible(false);
+        } else if (e.getSource() == b2) {
+            setVisible(false);
         }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(New_Patient::new);
     }
 }

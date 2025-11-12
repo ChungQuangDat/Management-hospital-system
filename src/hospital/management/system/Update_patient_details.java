@@ -3,169 +3,179 @@ package hospital.management.system;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 
 public class Update_patient_details extends JFrame {
-    Update_patient_details(){
-        JPanel panel = new JPanel();
-        panel.setBounds(5,5,925,450);
-        panel.setBackground(new Color(90,156,163));
-        panel.setLayout(null);
-        add(panel);
+    Choice choice;
+    JTextField textFieldR, textFieldINTIME, textFieldAmount, textFieldPending;
 
-        ImageIcon imageIcon = new ImageIcon(ClassLoader.getSystemResource("icon/updated.png"));
-        Image image = imageIcon.getImage().getScaledInstance(300,300,Image.SCALE_DEFAULT);
-        ImageIcon imageIcon1 = new ImageIcon(image);
-        JLabel label = new JLabel(imageIcon1);
-        label.setBounds(500,60,300,300);
-        panel.add(label);
+    public Update_patient_details() {
+        setTitle("Update Patient Details");
+        setSize(950, 500);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout());
 
-        JLabel label1 = new JLabel("Update Patient details");
-        label1.setBounds(124,11,260,25);
-        label1.setFont(new Font("Tahoma",Font.BOLD,20));
-        label1.setForeground(Color.white);
-        panel.add(label1);
+        JPanel header = new JPanel();
+        header.setBackground(new Color(90,156,163));
+        JLabel title = new JLabel("Update Patient Details");
+        title.setFont(new Font("Tahoma", Font.BOLD, 24));
+        title.setForeground(Color.WHITE);
+        header.add(title);
+        add(header, BorderLayout.NORTH);
 
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setBackground(new Color(90,156,163));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 20, 10, 20);
+        gbc.anchor = GridBagConstraints.WEST;
 
-        JLabel label2 = new JLabel("Name:");
-        label2.setBounds(25,88,100,14);
-        label2.setFont(new Font("Tahoma",Font.PLAIN,14));
-        label2.setForeground(Color.white);
-        panel.add(label2);
+        gbc.gridx = 0; gbc.gridy = 0;
+        JLabel label1 = new JLabel("Name:");
+        label1.setForeground(Color.WHITE);
+        formPanel.add(label1, gbc);
 
-        Choice choice = new Choice();
-        choice.setBounds(248,85,140,25);
-        panel.add(choice);
+        gbc.gridx = 1;
+        choice = new Choice();
+        formPanel.add(choice, gbc);
 
         try {
             connect c = new connect();
-            ResultSet resultSet = c.statement.executeQuery("select * from Patient_information");
-            while (resultSet.next()){
-                choice.add(resultSet.getString("Name"));
+            ResultSet rs = c.statement.executeQuery("select * from Patient_information");
+            while (rs.next()){
+                choice.add(rs.getString("Name"));
             }
+        } catch (Exception e) { e.printStackTrace(); }
+
+        gbc.gridx = 0; gbc.gridy = 1;
+        JLabel label2 = new JLabel("Room Number:");
+        label2.setForeground(Color.WHITE);
+        formPanel.add(label2, gbc);
+
+        gbc.gridx = 1;
+        textFieldR = new JTextField(15);
+        formPanel.add(textFieldR, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 2;
+        JLabel label3 = new JLabel("In Time:");
+        label3.setForeground(Color.WHITE);
+        formPanel.add(label3, gbc);
+
+        gbc.gridx = 1;
+        textFieldINTIME = new JTextField(15);
+        formPanel.add(textFieldINTIME, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 3;
+        JLabel label4 = new JLabel("Amount Paid:");
+        label4.setForeground(Color.WHITE);
+        formPanel.add(label4, gbc);
+
+        gbc.gridx = 1;
+        textFieldAmount = new JTextField(15);
+        formPanel.add(textFieldAmount, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 4;
+        JLabel label5 = new JLabel("Pending Amount:");
+        label5.setForeground(Color.WHITE);
+        formPanel.add(label5, gbc);
+
+        gbc.gridx = 1;
+        textFieldPending = new JTextField(15);
+        formPanel.add(textFieldPending, gbc);
+
+        mainPanel.add(formPanel, BorderLayout.CENTER);
+
+        ImageIcon imageIcon = new ImageIcon(ClassLoader.getSystemResource("icon/updated.png"));
+        Image image = imageIcon.getImage().getScaledInstance(300,300,Image.SCALE_DEFAULT);
+        JLabel imageLabel = new JLabel(new ImageIcon(image));
+        JPanel imgPanel = new JPanel();
+        imgPanel.setBackground(new Color(90,156,163));
+        imgPanel.add(imageLabel);
+        mainPanel.add(imgPanel, BorderLayout.EAST);
+        add(mainPanel, BorderLayout.CENTER);
+
+        JPanel footer = new JPanel();
+        JButton checkBtn = new JButton("Check");
+        checkBtn.addActionListener((ActionEvent e) -> checkPatient());
+        JButton updateBtn = new JButton("Update");
+        updateBtn.addActionListener((ActionEvent e) -> updatePatient());
+        JButton backBtn = new JButton("Back");
+        backBtn.addActionListener((ActionEvent e) -> setVisible(false));
+
+        footer.add(updateBtn);
+        footer.add(backBtn);
+        footer.add(checkBtn);
+        add(footer, BorderLayout.SOUTH);
+
+        setVisible(true);
+    }
+
+    private void checkPatient() {
+        try {
+            connect c = new connect();
+            String name = choice.getSelectedItem();
+            ResultSet rs = c.statement.executeQuery("select * from Patient_information where Name = '"+name+"'");
+            if (rs.next()) {
+                textFieldR.setText(rs.getString("Room_Number"));
+                textFieldINTIME.setText(rs.getString("Time"));
+                textFieldAmount.setText(rs.getString("Deposit"));
+
+                ResultSet rs2 = c.statement.executeQuery("select * from Room where vacant_room = '"+textFieldR.getText()+"'");
+                if (rs2.next()) {
+                    int price = Integer.parseInt(rs2.getString("Price"));
+                    int paid = Integer.parseInt(textFieldAmount.getText());
+                    textFieldPending.setText(""+(price - paid));
+                }
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    private void updatePatient() {
+        try {
+            connect c = new connect();
+            String name = choice.getSelectedItem();
+
+            // Lấy phòng cũ
+            String oldRoom = null;
+            ResultSet rsOld = c.statement.executeQuery("SELECT Room_Number FROM Patient_information WHERE Name = '"+name+"'");
+            if (rsOld.next()) {
+                oldRoom = rsOld.getString("Room_Number");
+            }
+
+            // Dữ liệu mới
+            String newRoom = textFieldR.getText();
+            String time = textFieldINTIME.getText();
+            String amount = textFieldAmount.getText();
+
+            // Kiểm tra xem phòng mới có đang bị occupied không
+            ResultSet rsCheck = c.statement.executeQuery("SELECT Availability FROM Room WHERE vacant_room = '"+newRoom+"'");
+            if (rsCheck.next()) {
+                String status = rsCheck.getString("Availability");
+                if (status.equalsIgnoreCase("Occupied") && !newRoom.equals(oldRoom)) {
+                    JOptionPane.showMessageDialog(null, "This room is already occupied! Please choose another room.");
+                    return;
+                }
+            }
+
+            // Cập nhật bệnh nhân
+            c.statement.executeUpdate("UPDATE Patient_information SET Room_Number='"+newRoom+"', Time='"+time+"', Deposit='"+amount+"' WHERE Name='"+name+"'");
+
+            // Cập nhật trạng thái phòng
+            if (oldRoom != null && !oldRoom.equals(newRoom)) {
+                c.statement.executeUpdate("UPDATE Room SET Availability='Availability' WHERE vacant_room='"+oldRoom+"'");
+                c.statement.executeUpdate("UPDATE Room SET Availability='Occupied' WHERE vacant_room='"+newRoom+"'");
+            }
+
+            JOptionPane.showMessageDialog(null, "Updated successfully!");
+            setVisible(false);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        JLabel label3 = new JLabel("Room number");
-        label3.setBounds(25,129,100,14);
-        label3.setFont(new Font("Tahoma",Font.PLAIN,14));
-        label3.setForeground(Color.white);
-        panel.add(label3);
-
-        JTextField textFieldR = new JTextField();
-        textFieldR.setBounds(248,129,140,20);
-        panel.add(textFieldR);
-
-        JLabel label4 = new JLabel("In Time");
-        label4.setBounds(25,174,100,14);
-        label4.setFont(new Font("Tahoma",Font.PLAIN,14));
-        label4.setForeground(Color.white);
-        panel.add(label4);
-
-        JTextField textFieldINTIME = new JTextField();
-        textFieldINTIME.setBounds(248,174,140,20);
-        panel.add(textFieldINTIME);
-
-        JLabel label5 = new JLabel("Amount Paid:");
-        label5.setBounds(25,216,100,14);
-        label5.setFont(new Font("Tahoma",Font.PLAIN,14));
-        label5.setForeground(Color.white);
-        panel.add(label5);
-
-        JTextField textFieldAmount = new JTextField();
-        textFieldAmount.setBounds(248,216,140,20);
-        panel.add(textFieldAmount);
-
-
-        JLabel label6 = new JLabel("Pending Amount:");
-        label6.setBounds(25,261,150,14);
-        label6.setFont(new Font("Tahoma",Font.PLAIN,14));
-        label6.setForeground(Color.white);
-        panel.add(label6);
-
-        JTextField textFieldPending = new JTextField();
-        textFieldPending.setBounds(248,261,140,20);
-        panel.add(textFieldPending);
-
-
-        JButton Check = new JButton("Check");
-        Check.setBounds(281,378,89,23);
-        Check.setBackground(Color.BLACK);
-        Check.setForeground(Color.white);
-        panel.add(Check);
-        Check.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String id = choice.getSelectedItem();
-                String q = "select * from Patient_information where Name = '"+id+"'";
-                try{
-                    connect c = new connect();
-                    ResultSet resultSet = c.statement.executeQuery(q);
-                    while (resultSet.next()){
-                        textFieldR.setText(resultSet.getString("Room_Number"));
-                        textFieldINTIME.setText(resultSet.getString("Time"));
-                        textFieldAmount.setText(resultSet.getString("Deposit"));
-                    }
-                    ResultSet resultSet1 = c.statement.executeQuery("select * from Room where vacant_room = '"+textFieldR.getText()+"' ");
-                    while(resultSet1.next()){
-                       String price = resultSet1.getString("Price");
-                       int amountPaid = Integer.parseInt(price) - Integer.parseInt(textFieldAmount.getText());
-                       textFieldPending.setText(""+amountPaid);
-                    }
-                } catch (Exception E) {
-                    E.printStackTrace();
-                }
-            }
-        });
-
-
-        JButton Update = new JButton("Update");
-        Update.setBounds(56,378,89,23);
-        Update.setBackground(Color.BLACK);
-        Update.setForeground(Color.white);
-        panel.add(Update);
-        Update.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try{
-                   connect c = new connect();
-                   String q = choice.getSelectedItem();
-                   String room = textFieldR.getText();
-                   String time = textFieldINTIME.getText();
-                   String amount = textFieldAmount.getText();
-                   c.statement.executeUpdate("update Patient_information set Room_Number = '"+room+"', Time ='"+time+"',Deposit='"+amount+"' where Name ='"+q+"'");
-                   JOptionPane.showMessageDialog(null,"Updated successfully");
-                   setVisible(false);
-                } catch (Exception E) {
-                    E.printStackTrace();
-                }
-            }
-        });
-
-        JButton Back = new JButton("Back");
-        Back.setBounds(168,378,89,23);
-        Back.setBackground(Color.BLACK);
-        Back.setForeground(Color.white);
-        panel.add(Back);
-        Back.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-            }
-        });
-
-
-
-        setSize(950,500);
-         setLayout(null);
-         setLocation(400,250);
-         setVisible(true);
     }
 
-
-    static void main(String[] args) {
-     new Update_patient_details();
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(Update_patient_details::new);
     }
 }

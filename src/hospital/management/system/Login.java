@@ -1,106 +1,137 @@
 package hospital.management.system;
 
-import java.sql.ResultSet;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
+import java.awt.event.*;
+import java.awt.geom.RoundRectangle2D;
+import java.sql.ResultSet;
 
 public class Login extends JFrame implements ActionListener {
-    JTextField textField;
-    JPasswordField jPasswordField;
-    JButton b1,b2;
 
-    Login(){
+    private JTextField usernameField;
+    private JPasswordField passwordField;
+    private JButton loginButton, cancelButton;
 
-        JLabel nameLabel = new JLabel("Username");
-        nameLabel.setBounds(40,20,100,30);
-        nameLabel.setFont(new Font("Tahoma",Font.BOLD,16));
-        nameLabel.setForeground(Color.black);
-        add(nameLabel);
+    public Login() {
+        setTitle("Hospital Management System - Login");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(450, 350);
+        setLocationRelativeTo(null);
+        setUndecorated(true); // bỏ viền mặc định
+        setShape(new RoundRectangle2D.Double(0, 0, 450, 350, 40, 40));
 
-        JLabel password = new JLabel("Password");
-        password.setBounds(40,70,100,30);
-        password.setFont(new Font("Tahoma",Font.BOLD,16));
-        password.setForeground(Color.black);
-        add(password);
+        // Panel nền gradient
+        JPanel backgroundPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                GradientPaint gradient = new GradientPaint(
+                        0, 0, new Color(0, 180, 200),
+                        getWidth(), getHeight(), new Color(70, 50, 140)
+                );
+                g2d.setPaint(gradient);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
+        backgroundPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(12, 10, 12, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
+        JLabel title = new JLabel("Login", JLabel.CENTER);
+        title.setFont(new Font("Tahoma", Font.BOLD, 26));
+        title.setForeground(Color.WHITE);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        backgroundPanel.add(title, gbc);
+        gbc.gridwidth = 1;
 
-        textField = new JTextField();
-        textField.setBounds(150, 20,150,30);
-        textField.setFont(new Font("Tahoma",Font.BOLD,15));
-        textField.setBackground(new Color(255,179,0));
-        add(textField);
+        JLabel userLabel = new JLabel("Username");
+        userLabel.setForeground(Color.LIGHT_GRAY);
+        userLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        backgroundPanel.add(userLabel, gbc);
 
+        usernameField = new JTextField(15);
+        usernameField.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
+        usernameField.setBackground(new Color(245, 245, 245));
+        usernameField.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        gbc.gridx = 1;
+        backgroundPanel.add(usernameField, gbc);
 
-        jPasswordField = new JPasswordField();
-        jPasswordField.setBounds(150,70,150,30);
-        jPasswordField.setFont(new Font("Tahoma",Font.PLAIN,15));
-        jPasswordField.setBackground(new Color(255,179,0));
-        add(jPasswordField);
+        JLabel passLabel = new JLabel("Password");
+        passLabel.setForeground(Color.LIGHT_GRAY);
+        passLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        backgroundPanel.add(passLabel, gbc);
 
+        passwordField = new JPasswordField(15);
+        passwordField.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
+        passwordField.setBackground(new Color(245, 245, 245));
+        gbc.gridx = 1;
+        backgroundPanel.add(passwordField, gbc);
 
-        ImageIcon imageIcon = new ImageIcon(ClassLoader.getSystemResource("icon/login.png"));
-        Image i1 = imageIcon.getImage().getScaledInstance(500,500,Image.SCALE_DEFAULT);
-        ImageIcon imageIcon1 = new ImageIcon(i1);
-        JLabel label = new JLabel(imageIcon1);
-        label.setBounds(320,-30,400,300);
-        add(label);
+        loginButton = new JButton("Login");
+        cancelButton = new JButton("Cancel");
 
+        // Style nút
+        for (JButton b : new JButton[]{loginButton, cancelButton}) {
+            b.setFocusPainted(false);
+            b.setBorderPainted(false);
+            b.setFont(new Font("Tahoma", Font.BOLD, 14));
+            b.setPreferredSize(new Dimension(100, 40));
+            b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            b.addActionListener(this);
+        }
 
-        b1 = new JButton("Login");
-        b1.setBounds(40,140,120,30);
-        b1.setFont(new Font("serif",Font.BOLD,15));
-        b1.setBackground(Color.BLACK);
-        b1.setForeground(Color.white);
-        b1.addActionListener(this);
-        add(b1);
+        loginButton.setBackground(new Color(0, 150, 255));
+        loginButton.setForeground(Color.WHITE);
 
+        cancelButton.setBackground(new Color(255, 80, 80));
+        cancelButton.setForeground(Color.WHITE);
 
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        backgroundPanel.add(loginButton, gbc);
 
-        b2 = new JButton("Cancel");
-        b2.setBounds(180,140,120,30);
-        b2.setFont(new Font("serif",Font.BOLD,15));
-        b2.setBackground(Color.BLACK);
-        b2.setForeground(Color.white);
-        b2.addActionListener(this);
-        add(b2);
+        gbc.gridx = 1;
+        backgroundPanel.add(cancelButton, gbc);
 
-
-       getContentPane().setBackground(new Color(109,164,170));
-       setSize(750, 300);
-       setLocation(400,270);
-       setLayout(null);
-       setVisible(true);
+        add(backgroundPanel);
+        setVisible(true);
     }
-     static void main(String[] args) {
-        new Login();
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(Login::new);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == b1){
-            try{
-              connect c = new connect();
-              String user = textField.getText();
-              String Password = new String(jPasswordField.getPassword());
+        if (e.getSource() == loginButton) {
+            try {
+                connect c = new connect();
+                String user = usernameField.getText();
+                String pass = new String(passwordField.getPassword());
 
-              String q = "select * from login where ID = '"+user+"' and password = '"+Password+"'";
-                ResultSet resultset = c.statement.executeQuery(q);
-                if(resultset.next()){
+                String q = "SELECT * FROM login WHERE ID = '" + user + "' AND password = '" + pass + "'";
+                ResultSet rs = c.statement.executeQuery(q);
+                if (rs.next()) {
+                    JOptionPane.showMessageDialog(this, "Welcome " + user + "!");
                     new Reception();
                     setVisible(false);
-                }else{
-                    JOptionPane.showMessageDialog(null,"Invalid");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Invalid username or password",
+                            "Login Failed", JOptionPane.ERROR_MESSAGE);
                 }
-
-            }catch(Exception E){
-                E.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-        }else{
-             System.exit(10);
+        } else if (e.getSource() == cancelButton) {
+            System.exit(0);
         }
     }
 }

@@ -2,155 +2,142 @@ package hospital.management.system;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 public class Reception extends JFrame {
-    Reception(){
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
-        panel.setBounds(5,160,1525,670);
-        panel.setBackground(new Color(109,164,170));
-        add(panel);
 
-        JPanel panel1 = new JPanel();
-        panel1.setLayout(null);
-        panel1.setBounds(5,5,1525,150);
-        panel1.setBackground(new Color(109,164,170));
-        add(panel1);
+    public Reception() {
+        setTitle("Hospital Management System - Reception");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1200, 700);
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
 
-        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("icon/dr.png"));
-        Image image = i1.getImage().getScaledInstance(250,250,Image.SCALE_DEFAULT);
-        ImageIcon i2 = new ImageIcon(image);
-        JLabel label = new JLabel(i2);
-        label.setBounds(1100,0,250,250);
-        panel1.add(label);
+        JPanel header = new JPanel();
+        header.setBackground(new Color(109, 164, 170));
+        header.setPreferredSize(new Dimension(0, 150)); // Header cao 150px
+        header.setLayout(null);
 
-        ImageIcon i11 = new ImageIcon(ClassLoader.getSystemResource("icon/amb.png"));
-        Image image1 = i11.getImage().getScaledInstance(300,100,Image.SCALE_DEFAULT);
-        ImageIcon i22 = new ImageIcon(image1);
-        JLabel label1 = new JLabel(i22);
-        label1.setBounds(800,50,300,100);
-        panel1.add(label1);
+        //Điều chỉnh Ảnh góc trái (OIP.jpg) to hơn nữa
+        ImageIcon leftIcon = new ImageIcon(ClassLoader.getSystemResource("icon/OIP.jpg"));
+        // Tăng kích thước lên đáng kể, ví dụ: 200x140 (cho chiều cao phù hợp với header 150px)
+        // Hoặc 180x140 nếu muốn chiều rộng ảnh không quá lớn.
+        // Dùng 200x140 để nó to rõ rệt hơn.
+        int leftImageWidth = 200; // Chiều rộng mới của ảnh trái
+        int leftImageHeight = 140; // Chiều cao mới của ảnh trái
+        Image leftImg = leftIcon.getImage().getScaledInstance(leftImageWidth, leftImageHeight, Image.SCALE_SMOOTH);
+        JLabel leftLabel = new JLabel(new ImageIcon(leftImg));
+        // Điều chỉnh vị trí để nó vẫn cách lề trên 15 và cách lề trái 10, với kích thước mới
+        leftLabel.setBounds(10, (150 - leftImageHeight) / 2, leftImageWidth, leftImageHeight); // Căn giữa theo chiều dọc trong header
+        header.add(leftLabel);
 
-        JButton btn1 = new JButton("Add new patient");
-        btn1.setBounds(30,15,200,30);
-        btn1.setBackground(new Color(246,215,118));
-        panel1.add(btn1);
-        btn1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new New_Patient();
+        //Điều chỉnh Tiêu đề để căn giữa hoàn hảo hơn sau khi ảnh trái to hơn
+        int headerTotalWidth = 1200; // Chiều rộng của JFrame
+        int rightImageWidth = 120; // Chiều rộng của ảnh bác sĩ bên phải
+        int rightImageMarginRight = 50; // Khoảng cách từ ảnh bác sĩ đến lề phải của header
+
+        // Tính toán vị trí x và chiều rộng cho tiêu đề:
+        // Tiêu đề sẽ bắt đầu sau ảnh trái (leftLabel) một khoảng trống.
+        // leftLabel.getX() + leftLabel.getWidth() + margin_between_left_image_and_title
+        int titleStartX = leftLabel.getX() + leftLabel.getWidth() + 30; // 30px là khoảng trống
+
+        // Tiêu đề sẽ kết thúc trước ảnh phải (logoLabel) một khoảng trống.
+        // logoLabel.getX() - margin_between_title_and_right_image
+        int titleEndX = (headerTotalWidth - rightImageMarginRight - rightImageWidth) - 30; // 30px là khoảng trống
+
+        int titleWidth = titleEndX - titleStartX;
+
+        // Đảm bảo titleWidth không âm hoặc quá nhỏ
+        if (titleWidth < 100) { // Nếu quá nhỏ, đặt một giá trị mặc định an toàn
+            titleWidth = 600;
+            titleStartX = (headerTotalWidth - titleWidth) / 2;
+        }
+
+        JLabel title = new JLabel("Hospital Management System", JLabel.CENTER);
+        title.setFont(new Font("Tahoma", Font.BOLD, 28));
+        title.setForeground(Color.WHITE);
+        title.setBounds(titleStartX, 30, titleWidth, 50); // Cập nhật vị trí và kích thước
+        header.add(title);
+
+        //Điều chỉnh Ảnh bác sĩ góc phải (dr.png) xích sang phải một chút
+        ImageIcon rightIcon = new ImageIcon(ClassLoader.getSystemResource("icon/dr.png"));
+        Image logoImg = rightIcon.getImage().getScaledInstance(rightImageWidth, 120, Image.SCALE_SMOOTH); // Sử dụng rightImageWidth
+        JLabel logoLabel = new JLabel(new ImageIcon(logoImg));
+        // Tính toán vị trí x cho ảnh bác sĩ để nó cách lề phải một khoảng nhất định
+        int logoLabelX = headerTotalWidth - rightImageWidth - rightImageMarginRight; // 1200 - 120 - 50 = 1030
+        logoLabel.setBounds(logoLabelX, 15, rightImageWidth, 120); // Cập nhật vị trí x
+        header.add(logoLabel);
+
+        add(header, BorderLayout.NORTH);
+
+
+
+
+        JPanel sidebar = new JPanel();
+        sidebar.setBackground(new Color(230, 240, 245));
+        sidebar.setLayout(new GridLayout(10, 1, 5, 5));
+        sidebar.setPreferredSize(new Dimension(220, 0));
+
+
+        JButton[] buttons = new JButton[10];
+        String[] btnNames = {
+                "Add new patient", "Room", "Department",
+                "All employee info", "Patient information", "Patient Discharge",
+                "Update patient details", "Hospital ambulance", "Search room", "Logout"
+        };
+
+
+        String[] iconPaths = {
+                "icon/748137.png", "icon/15192686.png", "icon/17774557.png",
+                "icon/14076511.png", "icon/medical-information.png", "icon/6902395.png",
+                "icon/updated.png", "icon/2894975.png", "icon/954591.png", "icon/4400629.png"
+        };
+
+        for (int i = 0; i < 10; i++) {
+            buttons[i] = new JButton(btnNames[i]);
+            buttons[i].setBackground(new Color(45, 90, 120));
+            buttons[i].setForeground(Color.WHITE);
+            buttons[i].setFocusPainted(false);
+            buttons[i].setFont(new Font("Tahoma", Font.BOLD, 14));
+            buttons[i].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            buttons[i].setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+
+
+            java.net.URL iconUrl = ClassLoader.getSystemResource(iconPaths[i]);
+            if (iconUrl != null) {
+                ImageIcon icon = new ImageIcon(new ImageIcon(iconUrl).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+                buttons[i].setIcon(icon);
             }
-        });
 
-        JButton btn2 = new JButton("Room");
-        btn2.setBounds(30,58,200,30);
-        btn2.setBackground(new Color(246,215,118));
-        panel1.add(btn2);
-        btn2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-              new Room();
-            }
-        });
+            sidebar.add(buttons[i]);
+        }
 
-        JButton btn3 = new JButton("Department");
-        btn3.setBounds(30,100,200,30);
-        btn3.setBackground(new Color(246,215,118));
-        panel1.add(btn3);
-        btn3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-               new Department();
-            }
-        });
+        add(sidebar, BorderLayout.WEST);
 
-        JButton btn4 = new JButton("All employee Information");
-        btn4.setBounds(270,15,200,30);
-        btn4.setBackground(new Color(246,215,118));
-        panel1.add(btn4);
-        btn4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-               new Employee_information();
-            }
-        });
 
-        JButton btn5 = new JButton("Patient information");
-        btn5.setBounds(270,58,200,30);
-        btn5.setBackground(new Color(246,215,118));
-        panel1.add(btn5);
-        btn5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                 new Patient_information();
-            }
-        });
+        JPanel content = new JPanel();
+        content.setBackground(Color.WHITE);
+        add(content, BorderLayout.CENTER);
 
-        JButton btn6 = new JButton("Patient Discharge");
-        btn6.setBounds(270,100,200,30);
-        btn6.setBackground(new Color(246,215,118));
-        panel1.add(btn6);
-        btn6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new patient_discharge();
-            }
-        });
 
-        JButton btn7 = new JButton("Update patient details");
-        btn7.setBounds(510,15,200,30);
-        btn7.setBackground(new Color(246,215,118));
-        panel1.add(btn7);
-        btn7.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-              new Update_patient_details();
-            }
+        buttons[0].addActionListener(e -> new New_Patient());
+        buttons[1].addActionListener(e -> new Room());
+        buttons[2].addActionListener(e -> new Department());
+        buttons[3].addActionListener(e -> new Employee_information());
+        buttons[4].addActionListener(e -> new Patient_information());
+        buttons[5].addActionListener(e -> new patient_discharge());
+        buttons[6].addActionListener(e -> new Update_patient_details());
+        buttons[7].addActionListener(e -> new Ambulance());
+        buttons[8].addActionListener(e -> new Search_Room());
+        buttons[9].addActionListener(e -> {
+            setVisible(false);
+            new Login();
         });
-
-        JButton btn8 = new JButton("Hospital ambulance");
-        btn8.setBounds(510,58,200,30);
-        btn8.setBackground(new Color(246,215,118));
-        panel1.add(btn8);
-        btn8.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-              new Ambulance();
-            }
-        });
-
-        JButton btn9 = new JButton("Search room");
-        btn9.setBounds(510,100,200,30);
-        btn9.setBackground(new Color(246,215,118));
-        panel1.add(btn9);
-        btn9.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new Search_Room();
-            }
-        });
-
-        JButton btn10 = new JButton("Logout");
-        btn10.setBounds(750,15,200,30);
-        btn10.setBackground(new Color(246,215,118));
-        panel1.add(btn10);
-        btn10.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                new Login();
-            }
-        });
-
-        setSize(1950,1090);
-        getContentPane().setBackground(Color.WHITE);
-        setLayout(null);
 
         setVisible(true);
     }
-    static void main(String[] args) {
-        new Reception();
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(Reception::new);
     }
 }

@@ -4,83 +4,78 @@ import net.proteanit.sql.DbUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 
 public class Ambulance extends JFrame {
-    Ambulance(){
-        JPanel panel = new JPanel();
-        panel.setBounds(5,5,875,550);
-        panel.setBackground(new Color(90,156,163));
-        panel.setLayout(null);
-        add(panel);
+
+    public Ambulance() {
+        setTitle("Ambulance Information");
+        setSize(900, 600);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+
+        setupLookAndFeel();
+
+        setLayout(new BorderLayout());
+
 
         JTable table = new JTable();
-        table.setBounds(10,40,900,450);
-        table.setBackground(new Color(90,156,163));
-        table.setFont(new Font("Tahoma",Font.BOLD,14));
-        panel.add(table);
+        table.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        table.setRowHeight(28);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        table.setFillsViewportHeight(true);
 
-        try{
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+
+
+        loadTableData(table);
+
+        add(scrollPane, BorderLayout.CENTER);
+
+
+        JPanel footer = new JPanel();
+
+        JButton backBtn = new JButton("BACK");
+        backBtn.addActionListener(e -> setVisible(false));
+
+
+        footer.add(backBtn);
+        add(footer, BorderLayout.SOUTH);
+
+        setVisible(true);
+    }
+
+
+    private void loadTableData(JTable table) {
+        try {
             connect c = new connect();
             String q = "select * from Ambulance";
             ResultSet resultSet = c.statement.executeQuery(q);
             table.setModel(DbUtils.resultSetToTableModel(resultSet));
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading Ambulance data: " + e.getMessage());
         }
+    }
 
-        JLabel label1 = new JLabel("Name");
-        label1.setBounds(31,11,100,14);
-        label1.setFont(new Font("Tahoma",Font.BOLD,14));
-        panel.add(label1);
 
-        JLabel label2 = new JLabel("Gender ");
-        label2.setBounds(264,11,100,14);
-        label2.setFont(new Font("Tahoma",Font.BOLD,14));
-        panel.add(label2);
-
-        JLabel label3 = new JLabel("Car name");
-        label3.setBounds(400,11,100,14);
-        label3.setFont(new Font("Tahoma",Font.BOLD,14));
-        panel.add(label3);
-
-        JLabel label4 = new JLabel("Availability");
-        label4.setBounds(600,11,100,14);
-        label4.setFont(new Font("Tahoma",Font.BOLD,14));
-        panel.add(label4);
-
-        JLabel label5 = new JLabel("Location");
-        label5.setBounds(750,11,100,14);
-        label5.setFont(new Font("Tahoma",Font.BOLD,14));
-        panel.add(label5);
-
-        JButton button = new JButton("BACK");
-        button.setBounds(450,510,120,30);
-        button.setBackground(Color.BLACK);
-        button.setForeground(Color.white);
-        panel.add(button);
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
+    private void setupLookAndFeel() {
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
             }
-        });
-
-
-
-
-        setSize(900,600);
-        setLocation(300,200);
-        setLayout(null);
-        setVisible(true);
-    }
-    static void main(String[] args) {
-        new Ambulance();
-    }
+        } catch (Exception e) {
+            System.err.println("Nimbus Look and Feel not available. Using default.");
+        }
     }
 
-
-
-
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(Ambulance::new);
+    }
+}

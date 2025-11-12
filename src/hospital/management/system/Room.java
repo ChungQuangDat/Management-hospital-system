@@ -5,80 +5,60 @@ import net.proteanit.sql.DbUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 
 public class Room extends JFrame {
     JTable table;
 
-    Room(){
-        JPanel panel = new JPanel();
-        panel.setBounds(5,5,873,550);
-        panel.setBackground(new Color(90,156,163));
-        panel.setLayout(null);
-        add(panel);
+    public Room() {
+        setTitle("Room Information");
+        setSize(900, 600);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout());
 
+
+        table = new JTable();
+        table.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        table.setRowHeight(28);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        table.setFillsViewportHeight(true);
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        add(scrollPane, BorderLayout.CENTER);
+
+
+        try {
+            connect c = new connect();
+            String q = "SELECT * FROM room";
+            ResultSet rs = c.statement.executeQuery(q);
+            table.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setBackground(new Color(90, 156, 163));
         ImageIcon imageIcon = new ImageIcon(ClassLoader.getSystemResource("icon/roomm.png"));
-        Image image = imageIcon.getImage().getScaledInstance(200,300,Image.SCALE_DEFAULT);
-        ImageIcon imageIcon1 = new ImageIcon(image);
-        JLabel label = new JLabel(imageIcon1);
-        label.setBounds(600,200,200,200);
-        panel.add(label);
+        Image image = imageIcon.getImage().getScaledInstance(200, 300, Image.SCALE_DEFAULT);
+        JLabel imageLabel = new JLabel(new ImageIcon(image));
+        rightPanel.add(imageLabel);
+        add(rightPanel, BorderLayout.EAST);
 
 
-      table = new JTable();
-      table.setBounds(10,40,500,400);
-      table.setBackground(new Color(90,156,163));
-      panel.add(table);
+        JPanel footer = new JPanel();
+        JButton backButton = new JButton("BACK");
+        backButton.setBackground(Color.BLACK);
+        backButton.setForeground(Color.WHITE);
+        backButton.addActionListener((ActionEvent e) -> setVisible(false));
+        footer.add(backButton);
+        add(footer, BorderLayout.SOUTH);
 
-      try{
-         connect c = new connect();
-         String q ="select * from room";
-          ResultSet resultSet = c.statement.executeQuery(q);
-          table.setModel(DbUtils.resultSetToTableModel(resultSet));
-
-      }catch (Exception e){
-         e.printStackTrace();
-      }
-
-      JLabel label1 = new JLabel("Vacant Room");
-      label1.setBounds(12,15,100,15);
-      label1.setFont(new Font("Tahoma",Font.BOLD,14));
-      panel.add(label1);
-
-        JLabel label2 = new JLabel("Availability");
-        label2.setBounds(140,15,80,15);
-        label2.setFont(new Font("Tahoma",Font.BOLD,14));
-        panel.add(label2);
-
-        JLabel label3 = new JLabel("Price");
-        label3.setBounds(290,15,80,15);
-        label3.setFont(new Font("Tahoma",Font.BOLD,14));
-        panel.add(label3);
-
-        JLabel label4 = new JLabel("Bed type");
-        label4.setBounds(400,15,80,15);
-        label4.setFont(new Font("Tahoma",Font.BOLD,14));
-        panel.add(label4);
-
-        JButton back = new JButton("BACK");
-        back.setBounds(200,500,120,30);
-        back.setBackground(Color.BLACK);
-        back.setForeground(Color.white);
-        panel.add(back);
-        back.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-            }
-        });
-
-      setSize(900,600);
-      setLayout(null);
-      setLocation(300,200);
-      setVisible(true);
+        setVisible(true);
     }
-    static void main(String[] args) {
-        new Room();
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(Room::new);
     }
 }
