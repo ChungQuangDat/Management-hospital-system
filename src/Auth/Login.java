@@ -1,4 +1,6 @@
-package hospital.management.system;
+package Auth;
+
+import hospital.management.dashboard.Reception;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,11 +15,11 @@ public class Login extends JFrame implements ActionListener {
     private JButton loginButton, cancelButton;
 
     public Login() {
-        setTitle("Hospital Management System - Login");
+        setTitle("Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(450, 350);
-        setLocationRelativeTo(null);
-        setUndecorated(true); // bỏ viền mặc định
+        setLocationRelativeTo(null);//Căn cửa sổ vào giữa màn
+        setUndecorated(true);
         setShape(new RoundRectangle2D.Double(0, 0, 450, 350, 40, 40));
 
         // Panel nền gradient
@@ -48,7 +50,7 @@ public class Login extends JFrame implements ActionListener {
         backgroundPanel.add(title, gbc);
         gbc.gridwidth = 1;
 
-        JLabel userLabel = new JLabel("Username");
+        JLabel userLabel = new JLabel("Username/email");
         userLabel.setForeground(Color.LIGHT_GRAY);
         userLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
         gbc.gridx = 0;
@@ -117,7 +119,7 @@ public class Login extends JFrame implements ActionListener {
                 String user = usernameField.getText();
                 String pass = new String(passwordField.getPassword());
 
-                String q = "SELECT * FROM login WHERE ID = '" + user + "' AND password = '" + pass + "'";
+                String q = "SELECT * FROM login WHERE (ID = '" + user + "' OR email = '" + user + "') AND password = '" + pass + "'";
                 ResultSet rs = c.statement.executeQuery(q);
                 if (rs.next()) {
                     JOptionPane.showMessageDialog(this, "Welcome " + user + "!");

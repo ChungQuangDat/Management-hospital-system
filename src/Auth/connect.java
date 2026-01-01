@@ -1,12 +1,12 @@
-package hospital.management.system;
+package Auth;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 
 public class connect {
-    Connection connection;
-    Statement statement;
+    public Connection connection;
+    public Statement statement;
 
 
     public connect(){
